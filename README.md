@@ -3,13 +3,15 @@
 # MyDot kernel for Jupyter  
 [Example](https://github.com/nufeng1999/jupyter-MyDot-kernel/blob/master/example/MyDot.ipynb "Example")
 * Make sure you have the following requirements installed:
-  * Dot
+  * Graphviz
   * jupyter
   * zerorpc
   * python 3
   * pip
 ### Step-by-step
 ```bash
+pip install graphviz
+pip install zerorpc
 git clone https://github.com/nufeng1999/jupyter-MyDot-kernel.git
 cd jupyter-MyDot-kernel
 pip install -e . 

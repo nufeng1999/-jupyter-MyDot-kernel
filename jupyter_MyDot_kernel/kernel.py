@@ -108,20 +108,19 @@ class DotKernel(MyKernel):
         has_error = False
         try:
             src = Source(code)
-            png_src = src.pipe(format="png")
+            png_src = src.pipe(format="svg")
         except subprocess.CalledProcessError as _called_error:
             has_error = True
             error = _called_error.stderr
         except Exception as e:
             self.mymagics._logln(str(e),3)
         if not has_error:
-            data_string = base64.b64encode(png_src).decode("utf-8")
-            width, height = imgsize.get_png_size(png_src)
-            stream_content = {
-                "metadata": {"image/png": {"width": width, "height": height}},
-                "data": {"image/png": data_string},
-            }
-            self.send_response(self.iopub_socket, "display_data", stream_content)
+            data_string = base64.b64encode(png_src).decode("utf-8",errors='ignore')
+            mimetype='image/svg+xml'
+            header="<div><img alt=\"Output\" src=\"data:"+mimetype+";base64,"
+            end="\"></div>"
+            data_string=header+data_string+end
+            self.send_response(self.iopub_socket, 'display_data', {'data': {mimetype:data_string}, 'metadata': {mimetype:{}}})
         else:
             self.mymagics._logln(error.decode(),3)
         return bcancel_exec,retinfo,magics, code,fil_ename,retstr
